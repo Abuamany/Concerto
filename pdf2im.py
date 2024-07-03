@@ -7,11 +7,9 @@ import os
 st.title("PDF to JPG Converter")
 
 # Fungsi untuk menyimpan gambar
-def save_image(pages):
-    if not os.path.exists('output_images'):
-        os.makedirs('output_images')
-    
-    # Gabungkan dua halaman menjadi satu gambar
+
+# Gabungkan dua halaman menjadi satu gambar
+def show_image(pages):
     widths, heights = zip(*(i.size for i in pages))
     total_width = max(widths)
     total_height = sum(heights)
