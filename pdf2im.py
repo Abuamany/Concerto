@@ -1,38 +1,32 @@
 import streamlit as st
 from pdf2image import convert_from_path
 from PIL import Image
-import os
 
-# Judul aplikasi
-st.title("PDF to JPG Converter")
-
-# Fungsi untuk menampilkan gambar
-def show_image(pages):
-    # Gabungkan dua halaman menjadi satu gambar
-    widths, heights = zip(*(i.size for i in pages))
-    total_width = max(widths)
-    total_height = sum(heights)
-
-    new_image = Image.new('RGB', (total_width, total_height))
-
-    y_offset = 0
-    for page in pages:
-        new_image.paste(page, (0, y_offset))
-        y_offset += page.size[1]
-
-    # Tampilkan gambar di Streamlit
-    st.image(new_image, caption='Combined Image', use_column_width=True)
+st.title("Konversi PDF ke Gambar")
 
 # Unggah file PDF
-uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
+uploaded_file = st.file_uploader("Unggah file PDF", type="pdf")
 
 if uploaded_file is not None:
-    # Simpan file PDF yang diunggah ke disk sementara
-    with open("temp.pdf", "wb") as f:
+    # Simpan file PDF yang diunggah
+    with open("uploaded_pdf.pdf", "wb") as f:
         f.write(uploaded_file.getbuffer())
-    
-    # Tampilkan tombol untuk mengonversi PDF
-    if st.button("Convert PDF to JPG"):
-        pages = convert_from_path('temp.pdf', first_page=1, last_page=2)
-        show_image(pages)
-        st.write("Conversion done!")
+
+    # Konversi dua halaman pertama dari PDF ke gambar
+    pages = convert_from_path("uploaded_pdf.pdf", first_page=1, last_page=2)
+
+    # Tampilkan gambar di aplikasi
+    st.subheader("Hasil Konversi:")
+    for i, page in enumerate(pages):
+        st.image(page, caption=f'Halaman {i+1}')
+
+    # Berikan opsi untuk mengunduh gambar
+    #for i, page in enumerate(pages):
+    #    page.save(f'page_{i+1}.png')
+    #    with open(f'page_{i+1}.png', 'rb') as file:
+    #        btn = st.download_button(
+    #            label=f"Unduh Gambar Halaman {i+1}",
+    #            data=file,
+    #            file_name=f'page_{i+1}.png',
+    #            mime="image/png"
+    #        )
