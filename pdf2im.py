@@ -22,9 +22,9 @@ def save_image(pages):
     for page in pages:
         new_image.paste(page, (0, y_offset))
         y_offset += page.size[1]
-
-    new_image.save('output_images/combined_image.jpg', 'JPEG')
-    st.success("Image saved successfully in 'output_images' folder as combined_image.jpg")
+    
+    # Tampilkan gambar di Streamlit
+    st.image(new_image, caption='Combined Image', use_column_width=True)
 
 # Unggah file PDF
 uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
